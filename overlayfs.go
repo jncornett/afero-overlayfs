@@ -9,15 +9,15 @@ import (
 
 type Fs []afero.Fs
 
-func (f *Fs) Create(name string) (afero.File, error) {
+func (Fs) Create(name string) (afero.File, error) {
 	return nil, os.ErrPermission
 }
 
-func (f *Fs) Mkdir(name string, perm os.FileMode) error {
+func (Fs) Mkdir(name string, perm os.FileMode) error {
 	return os.ErrPermission
 }
 
-func (f *Fs) MkdirAll(path string, perm os.FileMode) error {
+func (Fs) MkdirAll(path string, perm os.FileMode) error {
 	return os.ErrPermission
 }
 
@@ -44,15 +44,15 @@ func (f Fs) OpenFile(name string, flag int, perm os.FileMode) (file afero.File, 
 	return nil, os.ErrNotExist
 }
 
-func (f *Fs) Remove(name string) error {
+func (Fs) Remove(name string) error {
 	return os.ErrPermission
 }
 
-func (f *Fs) RemoveAll(path string) error {
+func (Fs) RemoveAll(path string) error {
 	return os.ErrPermission
 }
 
-func (f *Fs) Rename(oldname string, newname string) error {
+func (Fs) Rename(oldname string, newname string) error {
 	return os.ErrPermission
 }
 
@@ -66,14 +66,16 @@ func (f Fs) Stat(name string) (fi os.FileInfo, err error) {
 	return nil, os.ErrNotExist
 }
 
-func (f *Fs) Name() string {
+func (Fs) Name() string {
 	return "Overlay"
 }
 
-func (f *Fs) Chmod(name string, mode os.FileMode) error {
+func (Fs) Chmod(name string, mode os.FileMode) error {
 	return os.ErrPermission
 }
 
-func (f *Fs) Chtimes(name string, atime time.Time, mtime time.Time) error {
+func (Fs) Chtimes(name string, atime time.Time, mtime time.Time) error {
 	return os.ErrPermission
 }
+
+var _ afero.Fs = Fs{}
