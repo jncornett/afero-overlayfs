@@ -21,24 +21,24 @@ func (f *Fs) MkdirAll(path string, perm os.FileMode) error {
 	return os.ErrPermission
 }
 
-func (f *Fs) Open(name string) (f afero.File, err error) {
+func (f Fs) Open(name string) (file afero.File, err error) {
 	for _, fs := range f {
-		f, err = fs.Open(name)
+		file, err = fs.Open(name)
 		if err == nil {
-			return f, nil
+			return file, nil
 		}
 	}
 	return nil, os.ErrNotExist
 }
 
-func (f *Fs) OpenFile(name string, flag int, perm os.FileMode) (f afero.File, err error) {
+func (f Fs) OpenFile(name string, flag int, perm os.FileMode) (file afero.File, err error) {
 	if flag&(os.O_WRONLY|os.O_RDWR|os.O_APPEND|os.O_CREATE|os.O_TRUNC) != 0 {
 		return nil, os.ErrPermission
 	}
 	for _, fs := range f {
-		f, err = fs.OpenFile(name, flat, perm)
+		file, err = fs.OpenFile(name, flag, perm)
 		if err == nil {
-			return f, nil
+			return file, nil
 		}
 	}
 	return nil, os.ErrNotExist
@@ -56,7 +56,7 @@ func (f *Fs) Rename(oldname string, newname string) error {
 	return os.ErrPermission
 }
 
-func (f *Fs) Stat(name string) (os.FileInfo, error) {
+func (f Fs) Stat(name string) (fi os.FileInfo, err error) {
 	for _, fs := range f {
 		fi, err = fs.Stat(name)
 		if err == nil {
